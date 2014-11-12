@@ -459,6 +459,7 @@ if Code.ensure_loaded?(Postgrex.Connection) do
     end
 
     defp run_with_psql(database, sql_command) do
+      database = Keyword.put_new(database, :port, @default_port)
       command = ""
 
       if password = database[:password] do
@@ -474,6 +475,7 @@ if Code.ensure_loaded?(Postgrex.Connection) do
         ~s(psql --quiet ) <>
         ~s(template1 ) <>
         ~s(--host #{database[:hostname]} ) <>
+        ~s(--port #{database[:port]} ) <>
         ~s(-c "#{sql_command};" )
 
       String.to_char_list(command)
